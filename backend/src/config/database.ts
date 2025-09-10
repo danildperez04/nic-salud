@@ -1,5 +1,5 @@
-import { DataSource, DataSourceOptions } from "typeorm";
-import { config } from "./config";
+import { DataSource, DataSourceOptions } from 'typeorm';
+import { config } from './config';
 
 const db = config.database;
 
@@ -10,7 +10,8 @@ export const dataSource = new DataSource({
   username: db.username,
   password: db.password,
   database: db.database,
-  entities: [__dirname + '/../models/*.{ts,js}'],
+  entities: [__dirname + '/../entities/*.{ts,js}'],
+  logging: true,
   synchronize: true,
 } as DataSourceOptions);
 

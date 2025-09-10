@@ -1,15 +1,15 @@
-import { Router } from "express";
-import { getAllUsers } from "../controllers/user.controller";
+import { Router } from 'express';
+import { findAll, findOne, create, update, remove } from '../controllers/user.controller';
 
 const router = Router();
 
 router.route('/')
-  .get(getAllUsers)
-  // .post();
+  .get(findAll)
+  .post(create);
 
 router.route('/:id')
-  // .get()
-  // .put()
-  // .delete();
+  .get(findOne)
+  .put(update)
+  .delete(remove);
 
 export default router;

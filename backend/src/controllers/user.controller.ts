@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
-import userRepository from "../repositories/user.repository";
+import { Request, Response } from 'express';
+import userRepository from '../repositories/user.repository';
 
 // Get all users
-async function getAllUsers(req: Request, res: Response){
+async function findAll(req: Request, res: Response) {
   const users = await userRepository.findAll();
 
   if (!users || users.length === 0) {
@@ -12,6 +12,26 @@ async function getAllUsers(req: Request, res: Response){
   res.json(users);
 }
 
+async function findOne(req: Request, res: Response) {
+  res.send('Get one user');
+}
+
+async function create(req: Request, res: Response) {
+  res.send('Create user')
+}
+
+async function update(req: Request, res: Response) {
+  res.send('Update user')
+}
+
+async function remove(req: Request, res: Response) {
+  res.send('Remove user')
+}
+
 export {
-  getAllUsers
+  findAll,
+  findOne,
+  create,
+  update,
+  remove
 }

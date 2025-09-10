@@ -1,5 +1,9 @@
-import { Request, Response } from "express";
+import { Request, Response } from 'express';
 
-function login(req: Request, res: Response){
+async function login(req: Request, res: Response) {
   res.send('Login user');
+}
+
+export {
+  login
 }

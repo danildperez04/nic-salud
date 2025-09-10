@@ -9,5 +9,5 @@ export class Patient {
   address: string;
   phoneNumber: string;
   email: string;
-  medicalHistory: string;
+  medicalRecord: string;
 }

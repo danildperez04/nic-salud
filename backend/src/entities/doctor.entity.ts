@@ -1,7 +1,12 @@
-export class Doctor{
+import { Entity } from 'typeorm';
+import { Specialty } from './speciality.entity';
+
+@Entity()
+export class Doctor {
   id: number;
   name: string;
-  specialty: string;
   phone: string;
   email: string;
+
+  specialties: Specialty[];
 }

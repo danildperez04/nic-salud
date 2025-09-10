@@ -1,13 +1,31 @@
-import { dataSource } from "../config/database"
-import { User } from "../entities/user.entity";
+import { dataSource } from '../config/database'
+import { User } from '../entities/user.entity';
 
-async function findAll(){
-  const userRepository = dataSource.getRepository(User);
-  const users = await userRepository.find(); 
+const userRepository = dataSource.getRepository(User);
+
+async function findAll() {
+  const users = await userRepository.find();
 
   return users;
 }
 
+async function findOne() {
+
+}
+
+async function create() {
+}
+
+async function update() {
+}
+
+async function remove() {
+}
+
 export default {
-  findAll
+  findAll,
+  findOne,
+  create,
+  update,
+  remove
 }
