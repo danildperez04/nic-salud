@@ -1,13 +1,14 @@
 import { Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { MedicalRecord } from './medical-record.entity';
 
 @Entity()
 export class Patient {
   @PrimaryGeneratedColumn()
   id: number;
-  name: string;
-  age: number;
+  dni: string;
+  fullname: string;
   address: string;
   phoneNumber: string;
-  email: string;
-  medicalRecord: string;
+  birthDate: Date;
+  medicalRecord: MedicalRecord;
 }
