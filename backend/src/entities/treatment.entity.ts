@@ -1,16 +1,27 @@
+import { Column, PrimaryGeneratedColumn } from 'typeorm';
 import { Diagnosis } from './diagnosis.entity';
 import { Doctor } from './doctor.entity';
 import { MedicalRecord } from './medical-record.entity';
 import { Patient } from './patient.entity';
 
 export class Treatment {
+  @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
   notes: string;
+
+  @Column()
   doseage: string;
+
+  @Column()
   duration: Date;
+
+  @Column()
   date: Date;
 
   // Relationships
+
   diagnosis: Diagnosis;
   medication: Medication;
   patient: Patient;
@@ -28,6 +39,7 @@ export class TreatmentMedication {
   dueDate: Date;
 
   // Relationships
+
   medication: Medication;
   treatment: Treatment;
 }

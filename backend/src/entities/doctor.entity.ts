@@ -1,27 +1,54 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Municipality } from './department.entity';
+import { Appointment } from './appointment.entity';
+import { User } from './user.entity';
+
 @Entity()
 export class Doctor {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({
+    unique: true
+  })
+  code: string;
+
+  @Column({
+    unique: true
+  })
   dni: string;
 
   @Column()
-  name: string;
+  fullname: string;
 
   @Column()
-  phone: string;
+  gender: string;
 
   @Column()
   address: string;
 
   @Column()
-  email: string;
+  phoneNumber: string;
 
+  @Column()
+  birthDate: Date;
+
+  // Relationships
+
+  @OneToOne(() => User, (user) => user.doctor)
+  @JoinColumn()
+  user: User;
+
+  @OneToMany(() => Appointment, (appointment) => appointment.doctor)
+  appointments: Appointment[];
+
+  @ManyToOne(() => Municipality, (municipality) => municipality.doctors)
+  @JoinColumn()
+  municipality: Municipality;
+
+  @ManyToMany(() => Specialty, (specialty) => specialty.doctors)
+  @JoinTable()
   specialties: Specialty[];
-
-  municipality: string;
 }
 
 @Entity()
@@ -31,4 +58,9 @@ export class Specialty {
 
   @Column()
   name: string;
+
+  // Relationships
+
+  @ManyToMany(() => Doctor, (doctor) => doctor.specialties)
+  doctors: Doctor[];
 }

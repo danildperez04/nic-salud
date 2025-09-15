@@ -11,6 +11,7 @@ export default defineConfig([
     languageOptions: { globals: globals.node },
     rules: {
       'quotes': ['warn', 'single'],
+      'semi': ['warn']
     }
   },
   tseslint.configs.recommended,
