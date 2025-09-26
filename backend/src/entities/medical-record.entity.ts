@@ -4,6 +4,7 @@ import { ClinicalHistory } from './clinical-history.entity';
 import { Patient } from './patient.entity';
 import { Treatment } from './treatment.entity';
 import { Diagnosis } from './diagnosis.entity';
+import { LabTest } from './lab-test.enity';
 
 @Entity()
 export class MedicalRecord {
@@ -32,7 +33,7 @@ export class MedicalRecord {
   @OneToMany(() => PatientDisease, (patientDisease) => patientDisease.medicalRecord)
   patientDiseases: PatientDisease[];
 
-  // @OneToMany()
+  @OneToMany(() => Allergy, (allergy) => allergy.medicalRecord)
   patientAllergies: Allergy[];
 
   @OneToMany(() => Surgery, (surgery) => surgery.medicalRecord)
@@ -41,12 +42,19 @@ export class MedicalRecord {
   @OneToMany(() => Appointment, (appointment) => appointment.medicalRecord)
   appointments: Appointment[];
 
+  @OneToMany(() => Diagnosis, (diagnosis) => diagnosis.medicalRecord)
   diagnoses: Diagnosis[];
 
+  @OneToMany(() => Treatment, (treatment) => treatment.medicalRecord)
   treatments: Treatment[];
 
+  @OneToMany(() => Vaccine, (vaccine) => vaccine.medicalRecord)
   vaccines: Vaccine[];
 
+  @OneToMany(() => LabTest, (labTest) => labTest.medicalRecord)
+  labTests: LabTest[];
+
+  @OneToMany(() => ClinicalHistory, (ch) => ch.medicalRecord)
   clinicalHistories: ClinicalHistory[];
 }
 
@@ -97,6 +105,9 @@ export class Vaccine {
 
   @Column()
   description: string;
+
+  @ManyToOne(() => MedicalRecord, (medicalRecord) => medicalRecord.vaccines)
+  medicalRecord: MedicalRecord;
 }
 
 @Entity()
@@ -109,6 +120,9 @@ export class Allergy {
 
   @Column()
   description: string;
+
+  @ManyToOne(() => MedicalRecord, (medicalRecord) => medicalRecord.patientAllergies)
+  medicalRecord: MedicalRecord;
 }
 
 

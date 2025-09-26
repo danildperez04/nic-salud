@@ -1,9 +1,11 @@
-import { Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Diagnosis } from './diagnosis.entity';
 import { Doctor } from './doctor.entity';
 import { MedicalRecord } from './medical-record.entity';
 import { Patient } from './patient.entity';
+// Medication is declared in this file
 
+@Entity()
 export class Treatment {
   @PrimaryGeneratedColumn()
   id: number;
@@ -12,40 +14,42 @@ export class Treatment {
   notes: string;
 
   @Column()
-  doseage: string;
+  dosage: string;
 
   @Column()
-  duration: Date;
+  duration: string;
 
   @Column()
   date: Date;
 
   // Relationships
-
+  @ManyToOne(() => Diagnosis, (diagnosis) => diagnosis.treatments)
   diagnosis: Diagnosis;
-  medication: Medication;
+
+  @ManyToOne(() => Patient, (patient) => patient.treatments)
   patient: Patient;
+
+  @ManyToOne(() => Doctor, (doctor) => doctor.treatments)
   doctor: Doctor;
+
+  @ManyToOne(() => MedicalRecord, (mr) => mr.treatments)
   medicalRecord: MedicalRecord;
-}
 
-export class TreatmentMedication {
-  id: number;
-  doseage: number;
-  frecuency: string;
-  duration: string;
-  notes: string;
-  startDate: Date;
-  dueDate: Date;
-
-  // Relationships
-
+  @ManyToOne(() => Medication, (med) => med.treatments)
   medication: Medication;
-  treatment: Treatment;
 }
 
+@Entity()
 export class Medication {
+  @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
   name: string;
+
+  @Column()
   description: string;
+
+  @OneToMany(() => Treatment, (t) => t.medication)
+  treatments: Treatment[];
 }
