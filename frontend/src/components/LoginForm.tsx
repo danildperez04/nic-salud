@@ -1,40 +1,60 @@
-import { Link } from "react-router";
-import { Input } from "./Input";
-import { SubmitButton } from "./SubmitButton";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import { useState, type ChangeEvent } from "react";
 
 export function LoginForm() {
+  const [user, setUser] = useState("");
+  const [password, setPassword] = useState("");
+  const [tempStore, setTempStore] = useState({});
+
+  const UserChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setUser(event.target.value);
+  };
+
+  const PasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setPassword(event.target.value);
+  };
+
+  const handleLogin = () => {
+    setTempStore({ user, password });
+  };
   return (
     <>
-      <form
-        className="flex bg-slate-800 rounded-lg shadow-lg w-[900px] h-[500px] overflow-hidden p-0 m-0 border-none" >
-        <section className=" w-1/2 flex items-center justify-center">
-          <img src='/logo.png' alt="Logo" className="w-full" />
-        </section>
-        <section className="flex flex-col gap-8 w-1/2 p-8 bg-white">
-          <h2 className="text-(--rich-black) font-bold text-5xl text-center">Bienvenido!</h2>
-          <div className="w-full flex flex-col gap-4">
-            <Input
-              id="username"
-              label="Nombre de usuario"
-              type="text"
-              placeholder="Ingrese su nombre de usuario"
-            />
-            <Input
-              id="password"
-              label="Contraseña"
-              type="password"
-              placeholder="Ingrese su contraseña"
-            />
-            <SubmitButton value="Iniciar sesión" />
-          </div>
-          <p className="text-(--blue)">
-            <a>¿Olvidaste tu contraseña?</a>
-          </p>
-          <p className="text-center mt-6">
-            ¿Aun no tienes cuenta? <Link to='/register'><span className="text-(--blue) font-semibold">Regístrate aquí</span></Link>
-          </p>
-        </section>
+      <form className="space-y-4">
+        <div>
+          <TextField
+            id="outlined-basic"
+            label="Nombre de Usuario"
+            variant="outlined"
+            fullWidth
+            type="text"
+            value={user}
+            onChange={UserChange}
+          />
+        </div>
+        <div>
+          <TextField
+            id="outlined-basic"
+            label="Password"
+            variant="outlined"
+            fullWidth
+            type="password"
+            value={password}
+            onChange={PasswordChange}
+          />
+        </div>
+        <div className="flex items-center justify-center">
+          <Button
+            className="w-md"
+            variant="contained"
+            type="submit"
+            onClick={handleLogin}
+          >
+            Enviar
+          </Button>
+        </div>
+        <p>{JSON.stringify(tempStore, null, 2)}</p>
       </form>
     </>
-  )
+  );
 }
