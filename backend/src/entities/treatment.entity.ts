@@ -3,7 +3,22 @@ import { Diagnosis } from './diagnosis.entity';
 import { Doctor } from './doctor.entity';
 import { MedicalRecord } from './medical-record.entity';
 import { Patient } from './patient.entity';
+
 // Medication is declared in this file
+@Entity()
+export class Medication {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  name: string;
+
+  @Column()
+  description: string;
+
+  @OneToMany(() => Treatment, (t) => t.medication)
+  treatments: Treatment[];
+}
 
 @Entity()
 export class Treatment {
@@ -37,19 +52,4 @@ export class Treatment {
 
   @ManyToOne(() => Medication, (med) => med.treatments)
   medication: Medication;
-}
-
-@Entity()
-export class Medication {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column()
-  name: string;
-
-  @Column()
-  description: string;
-
-  @OneToMany(() => Treatment, (t) => t.medication)
-  treatments: Treatment[];
 }
