@@ -1,6 +1,6 @@
 import { dataSource } from '../config/database';
 import { User } from '../entities/user.entity';
-import { NotFoundException } from 'common/exceptions/httpException';
+import { NotFoundException } from '../common/exceptions/httpException';
 
 const userRepository = dataSource.getRepository(User);
 
@@ -18,7 +18,7 @@ async function findAll() {
   return users;
 }
 
-async function findOne({ username }: { username: string }) {
+async function findByUsername(username: string) {
   const user = await userRepository.findOne({
     where: {
       username: username
@@ -30,7 +30,7 @@ async function findOne({ username }: { username: string }) {
   return user;
 }
 
-async function create(userData: userData) {
+async function create(userData: Omit<userData, 'id'>) {
   const user = await userRepository.save(userData);
 
   return user;
@@ -40,7 +40,7 @@ async function update({ username, userData }: {
   username: string;
   userData: Omit<userData, 'id' | 'roleId'>
 }) {
-  const userFound = await findOne({ username });
+  const userFound = await findByUsername(username);
 
   Object.assign(userFound, userData);
 
@@ -48,7 +48,7 @@ async function update({ username, userData }: {
 }
 
 async function remove({ username }: { username: string }) {
-  const found = await findOne({ username });
+  const found = await findByUsername(username);
 
   found.isActive = false;
 
@@ -57,7 +57,7 @@ async function remove({ username }: { username: string }) {
 
 export default {
   findAll,
-  findOne,
+  findByUsername,
   create,
   update,
   remove

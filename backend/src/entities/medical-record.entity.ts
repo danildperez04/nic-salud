@@ -50,20 +50,6 @@ export class MedicalRecord {
   clinicalHistories: ClinicalHistory[];
 }
 
-//
-@Entity()
-export class PatientDisease {
-  type: string;
-
-  // Relationships
-
-  @ManyToOne(() => MedicalRecord, (medicalRecord) => medicalRecord.patientDiseases)
-  medicalRecord: MedicalRecord;
-
-  @ManyToOne(() => Disease, (disease) => disease.patientDiseases)
-  disease: Disease;
-}
-
 @Entity()
 export class Disease {
   @PrimaryGeneratedColumn()
@@ -79,6 +65,24 @@ export class Disease {
 
   @OneToMany(() => PatientDisease, (patientDisease) => patientDisease.disease)
   patientDiseases: PatientDisease[];
+}
+
+//
+@Entity()
+export class PatientDisease {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  type: string;
+
+  // Relationships
+
+  @ManyToOne(() => MedicalRecord, (medicalRecord) => medicalRecord.patientDiseases)
+  medicalRecord: MedicalRecord;
+
+  @ManyToOne(() => Disease, (disease) => disease.patientDiseases)
+  disease: Disease;
 }
 
 // Catalogs
