@@ -19,7 +19,7 @@ This activity is important to streamline healthcare services, reduce overcrowdin
 
 ### Hospital staff functionalities
 
-1. Management of medical appointments and doctors’ schedules (appointment confirmation or rejection).
+1. Management of medical appointments and doctors' schedules (appointment confirmation or rejection).
 
 2. Registration and management of electronic medical records (history consultation, care records, laboratory/imaging results).
 
@@ -91,3 +91,68 @@ And that's it 😆. If everything went great you will have nic-salud running on 
 4. Staff area: authenticated hospital staff can review/confirm appointments, record care notes, and manage patients flow.
 
 ## API Endpoints
+
+### Users
+
+GET /api/users/
+
+GET /api/users/1
+
+```http
+POST http://localhost:3000/api/users HTTP/1.1
+Content-Type: application/json
+
+{
+  "username": "danildperez04",
+  "email": "danildperez02@gmail.com",
+  "password": "123456"
+}
+```
+
+### Authentication
+
+POST /auth/register: Registrers a new user (patient or staff).
+POST /auth/login: Logs in and returns an authetication token.
+POST /auth/logout: Logs out the user.
+GET /auth/profile: Returns the autheticated user's profile.
+
+### Patients
+
+GET /patients: Returns all patitens.
+GET /patients/{id}: Returns the information of a specific patient.
+POST /patients: Registrers a new patient.
+PUT /patients/{id}: Updates patient information.
+DELETE /patients{id}: Deletes patient.
+
+### Doctors
+
+GET /doctors: Returns all doctors.
+GET /doctors/:id: Returns a specific doctor.
+GET /doctors?specialty=:name: Filters doctors by specialty.
+GET /specialties: Returns available medical specialties.
+GET /doctors/:id/availability?date=YYYY-MM-DD: Returns a doctor's availability for a day.
+GET /doctors/:id/appointments: Returns appointments for a doctor.
+POST /doctors: Creates a new doctor.
+PUT /doctors/:id: Updates a doctor.
+DELETE /doctors/:id: Deletes a doctor.
+
+### Appointments
+
+GET /appointments: Returns all apointments (filterable by date, patient, or doctor).
+GET /appointments/{id}: Returns the details os a specific appointment.
+POST /appointments: Creates a new appointment.
+PUT /appointments/{id}: Update an existing appointment.
+DELETE /appointments/{id}: Cancels an appointment.
+
+### Staff
+
+GET /staff: Returns all non-doctor staff.
+GET /staff/:id: Returns a specific staff member.
+POST /staff: Creates a new staff member.
+PUT /staff/:id: Updates a staff member.
+DELETE /staff/:id: Deletes a staff member.
+
+### Administration & Reports
+
+GET /reports/statistics: Returns usage statistics (patients served, appointments, etc.).
+GET /reports/finance: Returns administrative/financial reports.

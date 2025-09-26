@@ -4,15 +4,23 @@
 
 ### Base de datos
 
-[] Definir las entidades principales en la base de datos
-[] Definir las relaciones entre las tablas
-[] Decidir tecnologias a utilizar
+- [x] Definir las entidades principales en la base de datos
+- [x] Definir las relaciones entre las tablas
+- [x] Decidir tecnologias a utilizar
 
 ### Interfaces de usuario
 
-[]
+- [ ] 
+- [ ]
 
 ## Desarrollo
 
-[x] Inicializar el backend con NestJS
-[x] Agregar las variables de entorno en el archivo .env
+### Backend
+
+- [x] Inicializar el backend con Express
+- [x] Agregar las variables de entorno en el archivo .env
+- [x] Configurar TypeOrm
+
+### Frontend
+
+- [ ] 
