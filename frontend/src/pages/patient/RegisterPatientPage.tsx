@@ -1,6 +1,6 @@
 // import { Input } from "../components/Input";
 
-export function CreatePatientPage() {
+export function RegisterPatientPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="w-full max-w-lg bg-white rounded-lg shadow p-8">
@@ -16,10 +16,6 @@ export function CreatePatientPage() {
             <label className="block text-sm font-medium">Apellido</label>
             <input type="text" className="mt-1 w-full border rounded-md px-3 py-2 text-sm" />
           </div>
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium">Correo electrónico</label>
-            <input type="email" className="mt-1 w-full border rounded-md px-3 py-2 text-sm" />
-          </div>
           <div>
             <label className="block text-sm font-medium">Teléfono</label>
             <input type="tel" className="mt-1 w-full border rounded-md px-3 py-2 text-sm" />
@@ -27,10 +23,6 @@ export function CreatePatientPage() {
           <div>
             <label className="block text-sm font-medium">Fecha de nacimiento</label>
             <input type="date" className="mt-1 w-full border rounded-md px-3 py-2 text-sm" />
-          </div>
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium">Contraseña</label>
-            <input type="password" className="mt-1 w-full border rounded-md px-3 py-2 text-sm" />
           </div>
           <div className="md:col-span-2">
             <button type="submit" className="w-full py-2 bg-blue-600 text-white rounded-md hover:opacity-95">
