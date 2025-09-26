@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import userRouter from './user.route';
+import authRouter from './auth.route';
 
 const router = Router();
 
@@ -8,6 +9,7 @@ router.get('/', (req, res) => {
 });
 
 router.use('/users', userRouter);
+router.use('/auth', authRouter);
 // router.use('/users', doctorRouter);
 // router.use('/users', patientRouter);
 
