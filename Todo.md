@@ -2,9 +2,15 @@
 
 ## Diseno
 
+### Base de datos
+
 [] Definir las entidades principales en la base de datos
 [] Definir las relaciones entre las tablas
 [] Decidir tecnologias a utilizar
+
+### Interfaces de usuario
+
+[]
 
 ## Desarrollo
 

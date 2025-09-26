@@ -11,7 +11,10 @@ export default defineConfig([
     languageOptions: { globals: globals.node },
     rules: {
       'quotes': ['warn', 'single'],
-      'semi': ['warn']
+      'semi': ['warn'],
+      '@typescript-eslint/no-unused-vars': ['warn', {
+        'argsIgnorePattern': '^_'
+      }]
     }
   },
   tseslint.configs.recommended,

@@ -1,8 +1,17 @@
-export function errorHandler(err: any, req: any, res: any, next: any) {
+import { HttpException } from 'common/exceptions/httpException';
+import { NextFunction, Request, Response } from 'express';
+
+export function errorHandler(err: Error, req: Request, res: Response, _next: NextFunction) {
   console.error(err);
 
-  const statusCode = err.statusCode || 500;
-  const message = err.message || 'Internal Server Error';
+  let statusCode = 500;
+  let message = 'Internal Server Error';
+
+  if (err instanceof HttpException) {
+
+    statusCode ??= 500;
+    message ??= err.message;
+  }
 
   res.status(statusCode).json({ message });
 }

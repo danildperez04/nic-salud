@@ -13,7 +13,7 @@ export class Department {
   // Relationships
 
   @OneToMany(() => Municipality, (municipality) => municipality.department)
-  municipalities: Municipality[]
+  municipalities: Municipality[];
 }
 
 @Entity()
@@ -34,5 +34,5 @@ export class Municipality {
   doctors: Doctor[];
 
   @OneToMany(() => Patient, (patient) => patient.municipality)
-  patients: Patient[]
+  patients: Patient[];
 }

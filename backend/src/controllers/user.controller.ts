@@ -17,15 +17,15 @@ async function findOne(req: Request, res: Response) {
 }
 
 async function create(req: Request, res: Response) {
-  res.send('Create user')
+  res.send('Create user');
 }
 
 async function update(req: Request, res: Response) {
-  res.send('Update user')
+  res.send('Update user');
 }
 
 async function remove(req: Request, res: Response) {
-  res.send('Remove user')
+  res.send('Remove user');
 }
 
 export {
@@ -34,4 +34,4 @@ export {
   create,
   update,
   remove
-}
+};

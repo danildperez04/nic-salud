@@ -19,6 +19,6 @@ export class Diagnosis {
   medicalRecord: MedicalRecord;
   appointment: Appointment;
   disease: Disease[];
-  allergies: Allergy[]
+  allergies: Allergy[];
   treatment: Treatment;
 }
