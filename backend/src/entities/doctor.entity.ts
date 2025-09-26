@@ -3,6 +3,7 @@ import { Municipality } from './department.entity';
 import { Appointment } from './appointment.entity';
 import { User } from './user.entity';
 import { Diagnosis } from './diagnosis.entity';
+import { Treatment } from './treatment.entity';
 
 @Entity()
 export class Doctor {
@@ -44,8 +45,10 @@ export class Doctor {
   appointments: Appointment[];
 
   @OneToMany(() => Diagnosis, (diagnosis) => diagnosis.doctor)
-  @JoinColumn()
   diagnoses: Diagnosis[];
+
+  @OneToMany(() => Treatment, (t) => t.doctor)
+  treatments: Treatment[];
 
   @ManyToOne(() => Municipality, (municipality) => municipality.doctors)
   @JoinColumn()
