@@ -2,6 +2,7 @@ import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany
 import { Municipality } from './department.entity';
 import { Appointment } from './appointment.entity';
 import { User } from './user.entity';
+import { Diagnosis } from './diagnosis.entity';
 
 @Entity()
 export class Doctor {
@@ -41,6 +42,10 @@ export class Doctor {
 
   @OneToMany(() => Appointment, (appointment) => appointment.doctor)
   appointments: Appointment[];
+
+  @OneToMany(() => Diagnosis, (diagnosis) => diagnosis.doctor)
+  @JoinColumn()
+  diagnoses: Diagnosis[];
 
   @ManyToOne(() => Municipality, (municipality) => municipality.doctors)
   @JoinColumn()

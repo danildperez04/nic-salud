@@ -3,6 +3,20 @@ import { Doctor } from './doctor.entity';
 import { Patient } from './patient.entity';
 
 @Entity()
+export class Role {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  name: string;
+
+  // Relationships
+
+  @OneToMany(() => User, (user) => user.role)
+  users: User[];
+}
+
+@Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
@@ -20,11 +34,24 @@ export class User {
   @Column()
   password: string;
 
-  @Column()
+  @Column({
+    default: true
+  })
   isActive: boolean;
 
+  @Column({
+    default: true
+  })
   twoFAEnabled: boolean;
+
+  @Column({
+    nullable: true
+  })
   twoFACode: string;
+
+  @Column({
+    nullable: true
+  })
   twoFACodeExpiresAt: Date;
 
   // Relationships
@@ -38,19 +65,6 @@ export class User {
 
   @OneToOne(() => Patient, (patient) => patient.user)
   patient: Patient;
-}
-
-export class Role {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column()
-  name: string;
-
-  // Relationships
-
-  @OneToMany(() => User, (user) => user.role)
-  users: User[];
 }
 
 /** TODO: Finish entities
