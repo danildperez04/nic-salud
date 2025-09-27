@@ -1,7 +1,13 @@
-import { Home } from '../components/Home'
+import { WelcomeSection } from '@/components/WelcomeSection'
+import { ServiceSection } from '@/components/ServiceSection'
+import { ContactSection } from '@/components/ContactSection'
 
 export function HomePage() {
   return (
-    <Home />
+    <>
+      <WelcomeSection />
+      <ServiceSection />
+      <ContactSection />
+    </>
   )
 }

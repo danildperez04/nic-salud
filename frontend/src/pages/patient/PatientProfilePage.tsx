@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { toast } from 'react-toastify';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -53,15 +53,16 @@ export function PatientProfilePage() {
     try {
       const base = import.meta.env.VITE_API_URL;
       const token = localStorage.getItem('token');
-      const payload: any = { ...form };
+      const payload = { ...form };
       if (payload.birthDate === '') delete payload.birthDate;
 
       const res = await axios.put(`${base}/patients/profile`, payload, { headers: { Authorization: token ? `Bearer ${token}` : '' } });
       setProfile(res.data);
       setEditing(false);
       toast.success('Perfil actualizado');
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message ?? 'Error al actualizar');
+    } catch (err: unknown) {
+      if (err instanceof AxiosError)
+        toast.error(err?.response?.data?.message ?? 'Error al actualizar');
     } finally {
       setLoading(false);
     }

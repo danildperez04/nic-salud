@@ -15,7 +15,7 @@ type PatientForm = {
   municipalityId?: number;
 };
 
-export default function RegisterPatientForm() {
+export function CreatePatientForm() {
   const [loading, setLoading] = useState(false);
   const [departments, setDepartments] = useState<Array<{ id: number; name: string; municipalities?: Array<{ id: number; name: string }> }>>([]);
   const [selectedDepartmentIdx, setSelectedDepartmentIdx] = useState<number | null>(null);
