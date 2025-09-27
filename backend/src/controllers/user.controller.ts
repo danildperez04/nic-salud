@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import { CreateUserDto, UpdateUserDto } from '../dtos/user.dto';
 
 // Get all users
-async function findAll(req: Request, res: Response) {
+async function findAll(req: Request, res: Response, next: NextFunction) {
   try {
     const users = await userRepository.findAll();
 
@@ -17,24 +17,23 @@ async function findAll(req: Request, res: Response) {
 
     res.json(users);
   } catch (err) {
-    // Delegate to error handler
-    (req as any).next?.(err);
+    next(err);
   }
 }
 
-async function findOne(req: Request, res: Response) {
+async function findOne(req: Request, res: Response, next: NextFunction) {
   try {
-  const username = req.params.username;
+    const username = req.params.username;
 
     const user = await userRepository.findByUsername(username);
 
     res.json(user);
   } catch (err) {
-    (req as any).next?.(err);
+    next(err);
   }
 }
 
-async function create(req: Request, res: Response) {
+async function create(req: Request, res: Response, next: NextFunction) {
   try {
     const dto = req.body as CreateUserDto;
 
@@ -49,13 +48,13 @@ async function create(req: Request, res: Response) {
 
     res.status(201).json(user);
   } catch (err) {
-    (req as any).next?.(err);
+    next(err);
   }
 }
 
 async function update(req: Request, res: Response, next: NextFunction) {
   try {
-  const username = req.params.username;
+    const username = req.params.username;
     const dto = req.body as UpdateUserDto;
 
     // Build only defined fields to avoid overwriting with undefined
@@ -77,7 +76,7 @@ async function update(req: Request, res: Response, next: NextFunction) {
 
 async function remove(req: Request, res: Response, next: NextFunction) {
   try {
-  const username = req.params.username;
+    const username = req.params.username;
 
     const removed = await userRepository.remove({ username });
 

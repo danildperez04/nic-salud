@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import { notFoundHandler } from './middlewares/notfound';
 import api from './routes';
 import { errorHandler } from './middlewares/errorHandler';
@@ -6,6 +7,7 @@ import { errorHandler } from './middlewares/errorHandler';
 const app = express();
 
 // Middlewares
+app.use(cors())
 app.use(express.json());
 
 // Routes
