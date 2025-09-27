@@ -2,6 +2,8 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import { useState, type ChangeEvent } from "react";
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 export function RegisterForm() {
   const [username, setUsername] = useState("");
@@ -26,26 +28,20 @@ export function RegisterForm() {
     setRole(event.target.value as "paciente" | "doctor" | "admin");
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
     try {
-      const res = await fetch("http://localhost:3000/api/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, username, password }),
-      });
-
-      if (!res.ok) {
-        throw new Error("Error en la respuesta del servidor");
+      const res = await axios.post('http://localhost:3000/api/users', { email, username, password }, { headers: { 'Content-Type': 'application/json' } });
+      setTempStore(res.data);
+      toast.success('Usuario creado correctamente');
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        const msg = error.response?.data?.message ?? error.message ?? 'Error en la petición';
+        toast.error(msg);
+      } else {
+        toast.error('Ha ocurrido un error');
       }
-
-      const data = await res.json();
-      console.log(data);
-      setTempStore(data);
-    } catch (error) {
-      console.error("Error de red:", error);
-      // Manejo del error (mostrar mensaje al usuario)
     }
   };
 
