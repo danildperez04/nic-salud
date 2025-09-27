@@ -3,8 +3,8 @@ export * from './AppointmentsPage';
 export * from './NotFoundPage';
 
 export * from './auth/LoginPage';
-export * from './auth/RegisterPage';
+export * from './auth/RegisterUserPage';
 export * from './auth/ActivatePage';
 
-export * from './patient/RegisterPatientPage';
+export * from './CreatePatientPage';
 export * from './patient/PatientProfilePage';

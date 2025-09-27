@@ -1,6 +1,5 @@
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
 import { useState, type ChangeEvent } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -9,7 +8,6 @@ export function RegisterForm() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState<"paciente" | "doctor" | "admin">("paciente");
   const [tempStore, setTempStore] = useState({});
 
   const handleUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -22,10 +20,6 @@ export function RegisterForm() {
 
   const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
-  };
-
-  const handleRoleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setRole(event.target.value as "paciente" | "doctor" | "admin");
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -81,21 +75,6 @@ export function RegisterForm() {
           onChange={handlePasswordChange}
           required
         />
-      </div>
-      <div>
-        <TextField
-          label="Rol"
-          variant="outlined"
-          fullWidth
-          className="mb-4px"
-          select
-          value={role}
-          onChange={handleRoleChange}
-        >
-          <MenuItem value="paciente">Paciente</MenuItem>
-          <MenuItem value="doctor">Doctor</MenuItem>
-          <MenuItem value="admin">Administrador</MenuItem>
-        </TextField>
       </div>
 
       <Button variant="contained" type="submit" fullWidth size="large">
