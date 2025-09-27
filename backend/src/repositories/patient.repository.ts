@@ -1,6 +1,7 @@
 import { dataSource } from '../config/database';
 import { Patient } from '../entities/patient.entity';
 import { NotFoundException } from '../common/exceptions/httpException';
+import * as municipalityRepo from '../repositories/municipality.repository';
 
 const patientRepository = dataSource.getRepository(Patient);
 
@@ -12,7 +13,7 @@ interface PatientData {
   address: string;
   phoneNumber: string;
   birthDate: Date;
-  municipalityId?: number;
+  municipalityId: number;
   userId?: number;
   isActive?: boolean;
 }
@@ -30,6 +31,8 @@ async function findById(id: number) {
 }
 
 async function create(patientData: Omit<PatientData, 'id' | 'isActive'>) {
+  const municipality = await municipalityRepo.findOne(patientData.municipalityId);
+
   const patient = await patientRepository.save(patientData as any);
 
   return patient;
@@ -49,6 +52,10 @@ async function remove({ id }: { id: number }) {
   found.isActive = false;
 
   return await patientRepository.save(found);
+}
+
+async function linkPatientToUser() {
+
 }
 
 export default {
