@@ -1,4 +1,9 @@
-import { IsDateString, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsDateString, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+
+enum Gender {
+  MASCULINO = 'MASCULINO',
+  FEMENINO = 'FEMENINO'
+}
 
 export class CreatePatientDto {
   @IsNotEmpty()
@@ -10,8 +15,8 @@ export class CreatePatientDto {
   fullname: string;
 
   @IsNotEmpty()
-  @IsString()
-  gender: string;
+  @IsEnum(Gender)
+  gender: Gender;
 
   @IsNotEmpty()
   @IsString()
@@ -25,8 +30,8 @@ export class CreatePatientDto {
   @IsDateString()
   birthDate: string;
 
-  @IsOptional()
-  municipalityId?: number;
+  @IsNotEmpty()
+  municipalityId: number;
 
   @IsOptional()
   userId?: number;

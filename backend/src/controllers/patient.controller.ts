@@ -28,6 +28,12 @@ async function create(req: Request, res: Response, next: NextFunction) {
   try {
     const dto = req.body as CreatePatientDto;
 
+    // const isValid = validateDNI(dto.dni);
+
+    // if (!isValid) {
+    //   throw new BadRequestException('El DNI no es valido')
+    // }
+
     const patient = await patientRepository.create({
       dni: dto.dni,
       fullname: dto.fullname,
@@ -78,6 +84,10 @@ async function remove(req: Request, res: Response, next: NextFunction) {
   } catch (err) {
     next(err);
   }
+}
+
+async function validateDNI(dni: string) {
+
 }
 
 export {
