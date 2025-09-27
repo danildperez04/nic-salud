@@ -1,4 +1,6 @@
 import { AppLayout, AuthLayout } from '@/layouts'
+import { AdminLayout } from '@/layouts/AdminLayout'
+import { DoctorLayout } from '@/layouts/DoctorLayout'
 import { ActivatePage, AppointmentsPage, HomePage, LoginPage, NotFoundPage, PatientProfilePage, RegisterUserPage, CreatePatientPage } from '@/pages'
 import { BrowserRouter, Route, Routes } from 'react-router'
 
@@ -20,9 +22,12 @@ export default function AppRouter() {
           </Route>
           {/* <Route path='forgot-password' element={<h1>Forgot Password</h1>} /> */}
         </Route>
-        {/* Dashboard */}
-        <Route path='dashboard'>
-          <Route path='patient'>
+        {/* Admin */}
+        <Route path='admin' element={<AdminLayout />}>
+        </Route>
+        {/* Doctor */}
+        <Route path='doctor' element={<DoctorLayout />}>
+          <Route path='patients'>
             <Route path='add' element={<CreatePatientPage />} />
             {/* <Route path='update' /> */}
           </Route>
