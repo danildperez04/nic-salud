@@ -7,7 +7,7 @@ const departmentRepo = dataSource.getRepository(Department);
 const municipalityRepo = dataSource.getRepository(Municipality);
 
 async function findAllDepartments() {
-  const departments = await departmentRepo.find({ relations: ["municipality"] });
+  const departments = await departmentRepo.find({ relations: ["municipalities"] });
 
   if (!departments) throw new NotFoundException('No se han encontrado departamentos');
 
@@ -15,7 +15,11 @@ async function findAllDepartments() {
 }
 
 async function findAll() {
+  const municipalities = await municipalityRepo.find({ relations: ['department'] });
 
+  if (!municipalities) throw new NotFoundException('No se han encontrado municipios');
+
+  return municipalities;
 }
 
 async function findOne(id: number) {
@@ -28,5 +32,6 @@ async function findOne(id: number) {
 
 export {
   findAllDepartments,
+  findAll,
   findOne
 }
