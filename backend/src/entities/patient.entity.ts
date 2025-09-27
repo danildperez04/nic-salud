@@ -34,6 +34,15 @@ export class Patient {
   @Column({ default: true })
   isActive: boolean;
 
+  @Column({ nullable: true })
+  inviteToken?: string;
+
+  @Column({ nullable: true })
+  inviteExpiresAt?: Date;
+
+  @Column({ nullable: true })
+  inviteEmail?: string;
+
   // Relationships
 
   @OneToOne(() => MedicalRecord, (medicalRecord) => medicalRecord.patient)
