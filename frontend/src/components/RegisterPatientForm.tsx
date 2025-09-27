@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
 import { toast } from 'react-toastify';
 
@@ -9,27 +10,48 @@ type PatientForm = {
   fullname: string;
   phoneNumber: string;
   birthDate?: string;
+  gender: 'MASCULINO' | 'FEMENINO' | '';
+  address: string;
+  municipalityId?: number;
 };
 
 export default function RegisterPatientForm() {
   const [loading, setLoading] = useState(false);
+  const [departments, setDepartments] = useState<Array<{ id: number; name: string; municipalities?: Array<{ id: number; name: string }> }>>([]);
+  const [selectedDepartmentIdx, setSelectedDepartmentIdx] = useState<number | null>(null);
   const [patientData, setPatientData] = useState<PatientForm>({
     dni: '',
     fullname: '',
     phoneNumber: '',
     birthDate: undefined,
+    gender: '',
+    address: '',
+    municipalityId: undefined,
   });
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const { name, value } = e.target;
-    setPatientData((s) => ({ ...s, [name]: value }));
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    const target = e.target as HTMLInputElement;
+    const name = target.name as keyof PatientForm;
+    const value = target.value;
+
+    if (name === 'municipalityId') {
+      setPatientData((s) => ({ ...s, municipalityId: value === '' ? undefined : Number(value) }));
+      return;
+    }
+
+    if (name === 'gender') {
+      setPatientData((s) => ({ ...s, gender: value as 'MASCULINO' | 'FEMENINO' | '' }));
+      return;
+    }
+
+    setPatientData((s) => ({ ...s, [name]: value } as unknown as PatientForm));
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    // Basic validation
-    if (!patientData.dni || !patientData.fullname) {
-      toast.error('Por favor completa los campos obligatorios');
+    // Basic validation - ensure required fields (match backend CreatePatientDto)
+    if (!patientData.dni || !patientData.fullname || !patientData.gender || !patientData.address || !patientData.municipalityId) {
+      toast.error('Por favor completa los campos obligatorios (género, dirección y municipio)');
       return;
     }
 
@@ -39,20 +61,26 @@ export default function RegisterPatientForm() {
       const base = import.meta.env.VITE_API_URL;
       const token = localStorage.getItem('token') || undefined;
 
-      const res = await axios.post(
-        `${base}/patients`,
-        patientData,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-          },
-        }
-      );
+      const payload = {
+        dni: patientData.dni,
+        fullname: patientData.fullname,
+        phoneNumber: patientData.phoneNumber,
+        birthDate: patientData.birthDate,
+        gender: patientData.gender,
+        address: patientData.address,
+        municipalityId: patientData.municipalityId,
+      };
+
+      const res = await axios.post(`${base}/patients`, payload, {
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      });
 
       if (res.status >= 200 && res.status < 300) {
         toast.success('Paciente creado correctamente');
-        setPatientData({ dni: '', fullname: '', phoneNumber: '', birthDate: undefined });
+        setPatientData({ dni: '', fullname: '', phoneNumber: '', birthDate: undefined, gender: '', address: '', municipalityId: undefined });
       } else {
         toast.error(res.statusText || 'Error al crear paciente');
       }
@@ -69,6 +97,23 @@ export default function RegisterPatientForm() {
       setLoading(false);
     }
   }
+
+  useEffect(() => {
+    const base = import.meta.env.VITE_API_URL;
+    if (!base) return;
+
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await axios.get(`${base}/departments`);
+        if (!cancelled) setDepartments(res.data || []);
+      } catch (err) {
+        console.warn('No se pudieron cargar departamentos', err);
+      }
+    })();
+
+    return () => { cancelled = true; };
+  }, []);
 
   return (
     <form className="grid grid-cols-1 md:grid-cols-2 gap-4" onSubmit={handleSubmit}>
@@ -100,6 +145,84 @@ export default function RegisterPatientForm() {
           onChange={handleChange}
           fullWidth
         />
+      </div>
+      <div>
+        <TextField
+          select
+          label="Género"
+          name="gender"
+          value={patientData.gender}
+          onChange={handleChange}
+          fullWidth
+          required
+        >
+          <MenuItem value="MASCULINO">Masculino</MenuItem>
+          <MenuItem value="FEMENINO">Femenino</MenuItem>
+        </TextField>
+      </div>
+      <div>
+        <TextField
+          label="Dirección"
+          name="address"
+          value={patientData.address}
+          onChange={handleChange}
+          fullWidth
+          required
+        />
+      </div>
+      <div>
+        <TextField
+          select
+          label="Departamento"
+          name="departmentId"
+          value={selectedDepartmentIdx !== null ? String(selectedDepartmentIdx) : ''}
+          onChange={(e) => {
+            const idx = Number(e.target.value);
+            setSelectedDepartmentIdx(Number.isNaN(idx) ? null : idx);
+            // reset municipality when department changes
+            setPatientData((s) => ({ ...s, municipalityId: undefined }));
+          }}
+          fullWidth
+        >
+          {departments.length === 0 ? (
+            <MenuItem value="">No hay departamentos</MenuItem>
+          ) : (
+            departments.map((d, idx) => (
+              <MenuItem key={d.id} value={String(idx)}>
+                {d.name}
+              </MenuItem>
+            ))
+          )}
+        </TextField>
+      </div>
+
+      <div>
+        <TextField
+          select
+          label="Municipio"
+          name="municipalityId"
+          value={patientData.municipalityId ?? ''}
+          onChange={handleChange}
+          fullWidth
+          required
+        >
+          {departments.length === 0 ? (
+            <MenuItem value="">No hay municipios</MenuItem>
+          ) : (
+            // find selected department's municipalities
+            (() => {
+              // determine municipalities to show: if a department is selected show its municipalities, otherwise show all
+              const items = selectedDepartmentIdx !== null
+                ? (departments[selectedDepartmentIdx]?.municipalities ?? [])
+                : departments.flatMap(d => d.municipalities ?? []);
+              return items.map((m) => (
+                <MenuItem key={m.id} value={m.id}>
+                  {m.name}
+                </MenuItem>
+              ));
+            })()
+          )}
+        </TextField>
       </div>
       <div>
         <TextField
