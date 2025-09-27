@@ -16,6 +16,9 @@ interface PatientData {
   municipalityId: number;
   userId?: number;
   isActive?: boolean;
+  inviteToken?: string | null;
+  inviteExpiresAt?: Date | null;
+  inviteEmail?: string | null;
 }
 
 async function findAll() {
@@ -23,9 +26,25 @@ async function findAll() {
 }
 
 async function findById(id: number) {
-  const patient = await patientRepository.findOne({ where: { id } });
+  const patient = await patientRepository.findOne({ where: { id }, relations: ['municipality', 'user', 'medicalRecord'] });
 
   if (!patient) throw new NotFoundException('Patient not found');
+
+  return patient;
+}
+
+async function findByUserId(userId: number) {
+  const patient = await patientRepository.findOne({ where: { user: { id: userId } as any }, relations: ['municipality', 'user', 'medicalRecord'] });
+
+  if (!patient) throw new NotFoundException('Patient not found for user');
+
+  return patient;
+}
+
+async function findByInviteToken(token: string) {
+  const patient = await patientRepository.findOne({ where: { inviteToken: token }, relations: ['municipality', 'user', 'medicalRecord'] });
+
+  if (!patient) throw new NotFoundException('Invitation not found');
 
   return patient;
 }
@@ -61,6 +80,8 @@ async function linkPatientToUser() {
 export default {
   findAll,
   findById,
+  findByUserId,
+  findByInviteToken,
   create,
   update,
   remove

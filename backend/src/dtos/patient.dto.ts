@@ -35,6 +35,13 @@ export class CreatePatientDto {
 
   @IsOptional()
   userId?: number;
+
+  // Invite flow
+  @IsOptional()
+  inviteEmail?: string;
+
+  @IsOptional()
+  sendInvite?: boolean;
 }
 
 export class UpdatePatientDto {
@@ -67,4 +74,7 @@ export class UpdatePatientDto {
 
   @IsOptional()
   userId?: number;
+
+  @IsOptional()
+  inviteEmail?: string;
 }
