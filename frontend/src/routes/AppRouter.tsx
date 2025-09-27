@@ -1,13 +1,7 @@
+import { AppLayout, AuthLayout } from '@/layouts'
+import { ActivatePage, AppointmentsPage, HomePage, LoginPage, NotFoundPage, PatientProfilePage, RegisterPage, RegisterPatientPage } from '@/pages'
 import { BrowserRouter, Route, Routes } from 'react-router'
-import { HomePage } from '../pages/HomePage'
-import { LoginPage } from '../pages/LoginPage'
-import { AppLayout } from '../layouts/AppLayout'
-import { AuthLayout } from '../layouts/AuthLayout'
-import { RegisterPage } from '../pages/RegisterPage'
-import { RegisterPatientPage } from '../pages/patient/RegisterPatientPage'
-import { PatientProfilePage } from '../pages/patient/PatientProfilePage'
-import { AppointmentsPage } from '../pages/AppointmentsPage'
-import { NotFoundPage } from '@/pages/NotFoundPage'
+
 
 export default function AppRouter() {
   return (
@@ -18,6 +12,7 @@ export default function AppRouter() {
         </Route>
         <Route element={<AuthLayout />}>
           <Route path='login' element={<LoginPage />} />
+          <Route path='activate' element={<ActivatePage />} />
           <Route path='register'>
             <Route path='' element={<RegisterPage />} />
             <Route path='patient' element={<RegisterPatientPage />} />
