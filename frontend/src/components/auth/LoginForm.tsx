@@ -1,23 +1,45 @@
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { useState, type ChangeEvent } from "react";
+import * as authService from '@/services/auth';
+import { AxiosError } from "axios";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
+import { useToken } from "@/hooks/useToken";
 
 export function LoginForm() {
-  const [user, setUser] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [tempStore, setTempStore] = useState({});
+  const { setTokenStorage } = useToken();
 
-  const UserChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setUser(event.target.value);
+  const navigate = useNavigate();
+
+  const usernameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setUsername(event.target.value);
   };
 
-  const PasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const passwordChange = (event: ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
   };
 
-  const handleLogin = () => {
-    setTempStore({ user, password });
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    try {
+      const data = await authService.login({ username, password });
+
+      setTokenStorage(data.token);
+
+      navigate('/doctor');
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        console.error(error);
+        toast.error('Ha ocurrido un error al iniciar sesion');
+      }
+    }
+
   };
+
   return (
     <>
       <form className="space-y-4">
@@ -28,8 +50,8 @@ export function LoginForm() {
             variant="outlined"
             fullWidth
             type="text"
-            value={user}
-            onChange={UserChange}
+            value={username}
+            onChange={usernameChange}
           />
         </div>
         <div>
@@ -40,7 +62,7 @@ export function LoginForm() {
             fullWidth
             type="password"
             value={password}
-            onChange={PasswordChange}
+            onChange={passwordChange}
           />
         </div>
         <div className="flex items-center justify-center">
@@ -50,10 +72,9 @@ export function LoginForm() {
             type="submit"
             onClick={handleLogin}
           >
-            Enviar
+            Iniciar sesion
           </Button>
         </div>
-        <p>{JSON.stringify(tempStore, null, 2)}</p>
       </form>
     </>
   );
