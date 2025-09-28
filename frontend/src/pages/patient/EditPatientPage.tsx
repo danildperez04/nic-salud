@@ -1,4 +1,4 @@
-import { EditPatientForm } from "@/components/EditPatientForm";
+import { EditPatientForm } from "@/components/patient/EditPatientForm";
 
 export function EditPatientPage() {
   return (

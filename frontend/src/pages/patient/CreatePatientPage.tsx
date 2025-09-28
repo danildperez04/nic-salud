@@ -1,4 +1,4 @@
-import { CreatePatientForm } from "@/components/CreatePatientForm";
+import { CreatePatientForm } from "@/components/patient/CreatePatientForm";
 
 export function CreatePatientPage() {
 
