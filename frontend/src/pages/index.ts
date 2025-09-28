@@ -6,5 +6,7 @@ export * from './auth/LoginPage';
 export * from './auth/RegisterUserPage';
 export * from './auth/ActivatePage';
 
-export * from './CreatePatientPage';
+export * from './patient/CreatePatientPage';
+export * from './patient/EditPatientPage';
+
 export * from './patient/PatientProfilePage';

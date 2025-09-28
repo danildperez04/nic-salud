@@ -35,6 +35,7 @@ export function DashboardLayout({ title, menu, schema }: DashboardLayoutProps) {
               <Link
                 to={item.path}
                 className={`block p-2 rounded ${colorSchema.text} hover:${colorSchema.hover}`}
+                key={item.label}
               >
                 {item.label}
               </Link>
