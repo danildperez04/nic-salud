@@ -2,6 +2,7 @@ import { dataSource } from '../config/database';
 import { Patient } from '../entities/patient.entity';
 import { NotFoundException } from '../common/exceptions/httpException';
 import * as municipalityRepo from '../repositories/municipality.repository';
+import { Municipality } from '../entities/department.entity';
 
 const patientRepository = dataSource.getRepository(Patient);
 
@@ -14,6 +15,7 @@ interface PatientData {
   phoneNumber: string;
   birthDate: Date;
   municipalityId: number;
+  municipality: Municipality;
   userId?: number;
   isActive?: boolean;
   inviteToken?: string | null;
@@ -51,6 +53,8 @@ async function findByInviteToken(token: string) {
 
 async function create(patientData: Omit<PatientData, 'id' | 'isActive'>) {
   const municipality = await municipalityRepo.findOne(patientData.municipalityId);
+
+  patientData.municipality = municipality;
 
   const patient = await patientRepository.save(patientData as any);
 

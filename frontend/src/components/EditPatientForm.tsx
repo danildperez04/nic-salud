@@ -1,12 +1,14 @@
-import { useEffect, useState } from 'react';
-import TextField from '@mui/material/TextField';
-import MenuItem from '@mui/material/MenuItem';
-import Button from '@mui/material/Button';
-import { toast } from 'react-toastify';
+import React, { useEffect, useState } from "react"
+import { useLocation, useNavigate } from "react-router";
+import { toast } from "react-toastify";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
 import * as patientService from '@/services/patient';
-import * as departmentService from '@/services/department';
+import * as departmentService from "@/services/department";
 
 type PatientForm = {
+  id: number;
   dni: string;
   fullname: string;
   phoneNumber: string;
@@ -26,21 +28,66 @@ type Department = {
 }
 
 const initialValues: PatientForm = {
+  id: 0,
   dni: '',
   fullname: '',
   phoneNumber: '',
-  birthDate: undefined,
+  birthDate: '',
   gender: '',
   address: '',
   municipalityId: -1,
 }
 
-export function CreatePatientForm() {
+export function EditPatientForm() {
   const [loading, setLoading] = useState(false);
   const [departments, setDepartments] = useState<Array<Department>>([]);
   const [selectedDepartmentIdx, setSelectedDepartmentIdx] = useState<number | null>(null);
 
   const [patientData, setPatientData] = useState<PatientForm>(initialValues);
+
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Fetch departments
+  useEffect(() => {
+
+    departmentService
+      .getAll()
+      .then(
+        (data) => setDepartments(data || [])
+      ).catch(
+        (err) => {
+          console.error(err)
+          toast.error('No se han podido cargar los departamentos')
+        }
+      )
+
+  }, []);
+
+  // Fetch user
+  useEffect(() => {
+    const id = location.state?.patientId;
+
+    if (!id) {
+      navigate('/doctor/patients');
+      return;
+    }
+
+    setLoading(true);
+
+    patientService
+      .getOne(id)
+      .then(
+        data => setPatientData({ ...data, municipalityId: data.municipality.id })
+      ).catch(
+        err => {
+          console.error(err)
+          toast.error('Ha ocurrido un error al encontrar el paciente')
+        }
+      ).finally(
+        () => setLoading(false)
+      )
+  }, []);
 
   const validateFields = () => {
     if (!patientData.dni || !patientData.fullname || !patientData.gender || !patientData.address || (!patientData.municipalityId || patientData.municipalityId === -1)) {
@@ -49,7 +96,7 @@ export function CreatePatientForm() {
     }
   }
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+  async function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     const target = e.target as HTMLInputElement;
     const name = target.name as keyof PatientForm;
     const value = target.value;
@@ -60,58 +107,40 @@ export function CreatePatientForm() {
     }
 
     if (name === 'gender') {
-      setPatientData((s) => ({ ...s, gender: value as 'MASCULINO' | 'FEMENINO' | '' }));
+      setPatientData((patient) => ({ ...patient, gender: value as 'MASCULINO' | 'FEMENINO' | '' }));
       return;
     }
 
-    setPatientData((s) => ({ ...s, [name]: value } as unknown as PatientForm));
+    setPatientData((patient) => ({ ...patient, [name]: value }));
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    // Basic validation - ensure required fields (match backend CreatePatientDto)
     validateFields();
 
-    setLoading(true);
-
+    setLoading(true)
     try {
-      const res = await patientService.create(patientData);
-
+      const res = await patientService.update(patientData.id, patientData);
       console.log(res);
-      toast.success('Paciente creado correctamente');
 
-      setPatientData(initialValues);
-
-    } catch (error: unknown) {
+      toast.success('Se ha actualizado el paciente')
+    } catch (error) {
       console.error(error);
-      toast.error('Error al crear paciente');
-    } finally {
+      toast.error('No se ha podido actualizar el paciente')
+    }
+    finally {
       setLoading(false);
     }
   }
 
-
-  useEffect(() => {
-    departmentService
-      .getAll()
-      .then(
-        (data) => setDepartments(data || [])
-      ).catch(
-        (e) => {
-          console.warn(e)
-          toast.error('No se han podido cargar los departamentos')
-        }
-      )
-  }, []);
-
   return (
     <form className="grid grid-cols-1 md:grid-cols-2 gap-4" onSubmit={handleSubmit}>
-      <div>
+      <div className="col-span-2">
         <TextField
-          label="Cédula"
-          name="dni"
-          value={patientData.dni}
+          label="Nombre completo"
+          name="fullname"
+          value={patientData.fullname}
           onChange={handleChange}
           fullWidth
           required
@@ -119,9 +148,9 @@ export function CreatePatientForm() {
       </div>
       <div>
         <TextField
-          label="Nombre completo"
-          name="fullname"
-          value={patientData.fullname}
+          label="Cédula"
+          name="dni"
+          value={patientData.dni}
           onChange={handleChange}
           fullWidth
           required
@@ -151,6 +180,16 @@ export function CreatePatientForm() {
         </TextField>
       </div>
       <div>
+        <TextField
+          label="Fecha de nacimiento"
+          name="birthDate"
+          value={patientData.birthDate ? patientData.birthDate.split('T')[0] : ''}
+          onChange={handleChange}
+          type="date"
+          fullWidth
+        />
+      </div>
+      <div className="col-span-2 row-span-2">
         <TextField
           label="Dirección"
           name="address"
@@ -214,22 +253,12 @@ export function CreatePatientForm() {
           )}
         </TextField>
       </div>
-      <div>
-        <TextField
-          label="Fecha de nacimiento"
-          name="birthDate"
-          value={patientData.birthDate ?? ''}
-          onChange={handleChange}
-          type="date"
-          InputLabelProps={{ shrink: true }}
-          fullWidth
-        />
-      </div>
       <div className="md:col-span-2">
         <Button type="submit" variant="contained" color="primary" fullWidth disabled={loading}>
-          {loading ? 'Enviando...' : 'Registrarse'}
+          {loading ? 'Enviando...' : 'Editar'}
         </Button>
       </div>
+      {/* {JSON.stringify(patientData)} */}
     </form>
-  );
+  )
 }

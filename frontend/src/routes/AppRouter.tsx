@@ -1,7 +1,9 @@
 import { AppLayout, AuthLayout } from '@/layouts'
 import { AdminLayout } from '@/layouts/AdminLayout'
 import { DoctorLayout } from '@/layouts/DoctorLayout'
-import { ActivatePage, AppointmentsPage, HomePage, LoginPage, NotFoundPage, PatientProfilePage, RegisterUserPage, CreatePatientPage } from '@/pages'
+import { ActivatePage, AppointmentsPage, HomePage, LoginPage, NotFoundPage, PatientProfilePage, RegisterUserPage, CreatePatientPage, EditPatientPage } from '@/pages'
+import { HomeDoctorPage } from '@/pages/HomeDoctorPage'
+import { HomePatientPage } from '@/pages/patient/HomePatientPage'
 import { BrowserRouter, Route, Routes } from 'react-router'
 
 
@@ -27,9 +29,11 @@ export default function AppRouter() {
         </Route>
         {/* Doctor */}
         <Route path='doctor' element={<DoctorLayout />}>
+          <Route path='' element={<HomeDoctorPage />} index />
           <Route path='patients'>
+            <Route path='' element={<HomePatientPage />} />
             <Route path='add' element={<CreatePatientPage />} />
-            {/* <Route path='update' /> */}
+            <Route path='edit' element={<EditPatientPage />} />
           </Route>
           <Route path='appointments' element={<AppointmentsPage />} />
         </Route>
