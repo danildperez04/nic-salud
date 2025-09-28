@@ -1,5 +1,8 @@
 import { DashboardLayout } from './DashboardLayout';
 
+// interface DoctorLayoutProps {
+//   username?: string;
+// }
 
 export function DoctorLayout() {
   const menu = [

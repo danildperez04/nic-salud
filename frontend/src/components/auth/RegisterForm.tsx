@@ -1,8 +1,9 @@
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { useState, type ChangeEvent } from "react";
-import axios from 'axios';
 import { toast } from 'react-toastify';
+import * as authService from '@/services/auth';
+import { AxiosError } from "axios";
 
 export function RegisterForm() {
   const [username, setUsername] = useState("");
@@ -26,14 +27,12 @@ export function RegisterForm() {
     e.preventDefault();
 
     try {
-      const res = await axios.post('http://localhost:3000/api/users', { email, username, password }, { headers: { 'Content-Type': 'application/json' } });
-      setTempStore(res.data);
+      const data = authService.register({ username, email, password });
+      setTempStore(data);
       toast.success('Usuario creado correctamente');
     } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        const msg = error.response?.data?.message ?? error.message ?? 'Error en la petición';
-        toast.error(msg);
-      } else {
+      if (error instanceof AxiosError) {
+        console.error(error);
         toast.error('Ha ocurrido un error');
       }
     }

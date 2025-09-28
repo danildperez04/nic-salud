@@ -1,4 +1,4 @@
-import { PatientActivateForm } from '@/components/PatientActivateForm';
+import { PatientActivateForm } from '@/components/auth/PatientActivateForm';
 
 export function ActivatePage() {
 
