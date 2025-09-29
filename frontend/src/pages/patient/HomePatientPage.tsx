@@ -21,10 +21,12 @@ export function HomePatientPage() {
     const birth = new Date(birthDate);
 
     const age = today.getFullYear() - birth.getFullYear();
-    const month = today.getMonth() - birth.getMonth();
 
-    if (month < 0 || (month === 0 && birth.getDate() <= today.getDate())) {
-      return age + 1
+    const monthLeft = birth.getMonth() - today.getMonth();
+
+    // If month left > 0 o If in this month the birth has not due yet
+    if (monthLeft > 0 || (monthLeft === 0 && birth.getDate() >= today.getDate())) {
+      return age - 1
     }
 
     return age;
@@ -63,14 +65,14 @@ export function HomePatientPage() {
           <UserPlus className="w-10 h-10 text-green-600" />
           <div>
             <p className="text-gray-500 text-sm">Nuevos este mes</p>
-            <p className="text-xl font-semibold">12</p>
+            <p className="text-xl font-semibold">{patients.length}</p>
           </div>
         </div>
         <div className="bg-white shadow rounded-xl p-4 flex items-center space-x-4">
           <CalendarDays className="w-10 h-10 text-purple-600" />
           <div>
             <p className="text-gray-500 text-sm">Citas hoy</p>
-            <p className="text-xl font-semibold">7</p>
+            <p className="text-xl font-semibold">0</p>
           </div>
         </div>
       </div>

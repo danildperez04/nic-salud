@@ -107,11 +107,11 @@ export function CreatePatientForm() {
 
   return (
     <form className="grid grid-cols-1 md:grid-cols-2 gap-4" onSubmit={handleSubmit}>
-      <div>
+      <div className='md:col-span-2'>
         <TextField
-          label="Cédula"
-          name="dni"
-          value={patientData.dni}
+          label="Nombre completo"
+          name="fullname"
+          value={patientData.fullname}
           onChange={handleChange}
           fullWidth
           required
@@ -119,9 +119,9 @@ export function CreatePatientForm() {
       </div>
       <div>
         <TextField
-          label="Nombre completo"
-          name="fullname"
-          value={patientData.fullname}
+          label="Cédula"
+          name="dni"
+          value={patientData.dni}
           onChange={handleChange}
           fullWidth
           required
@@ -152,12 +152,13 @@ export function CreatePatientForm() {
       </div>
       <div>
         <TextField
-          label="Dirección"
-          name="address"
-          value={patientData.address}
+          label="Fecha de nacimiento"
+          name="birthDate"
+          value={patientData.birthDate ? patientData.birthDate.split('T')[0] : ''}
           onChange={handleChange}
+          type="date"
           fullWidth
-          required
+          InputLabelProps={{ shrink: true }}
         />
       </div>
       <div>
@@ -185,7 +186,6 @@ export function CreatePatientForm() {
           )}
         </TextField>
       </div>
-
       <div>
         <TextField
           select
@@ -214,15 +214,14 @@ export function CreatePatientForm() {
           )}
         </TextField>
       </div>
-      <div>
+      <div className='md:col-span-2'>
         <TextField
-          label="Fecha de nacimiento"
-          name="birthDate"
-          value={patientData.birthDate ?? ''}
+          label="Dirección"
+          name="address"
+          value={patientData.address}
           onChange={handleChange}
-          type="date"
-          InputLabelProps={{ shrink: true }}
           fullWidth
+          required
         />
       </div>
       <div className="md:col-span-2">

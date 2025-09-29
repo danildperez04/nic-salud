@@ -28,7 +28,7 @@ export function DashboardLayout({ title, menu, schema }: DashboardLayoutProps) {
     <div className={`flex h-screen ${colorSchema.background}`}>
       {/* Sidebar */}
       <aside className={`w-64 ${colorSchema.aside} shadow-lg flex flex-col`}>
-        <div className={`p-6 text-2xl font-bold border-b ${colorSchema.text}`}>{title}</div>
+        <div className={`p-6 text-2xl font-bold border-b ${colorSchema.text}`}><Link to='/doctor'>{title}</Link></div>
         <nav className="flex-1 p-4 space-y-2">
           {
             menu.map((item) => (

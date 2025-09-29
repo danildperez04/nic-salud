@@ -10,7 +10,7 @@ export function PatientActivateForm() {
   const token = searchParams.get('token') ?? '';
   const navigate = useNavigate();
 
-  const [form, setForm] = useState({ username: '', email: '', password: '' });
+  const [form, setForm] = useState({ username: '', email: '', password: '', accessCode: '' });
   const [loading, setLoading] = useState(false);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -76,6 +76,17 @@ export function PatientActivateForm() {
           onChange={handleChange}
           required
         />
+      </div>
+      <div>
+        <TextField
+          label="Codigo de acceso"
+          variant="outlined"
+          fullWidth
+          type="text"
+          value={form.accessCode}
+          className="mb-4"
+          onChange={handleChange}
+          required />
       </div>
 
       <Button variant="contained" type="submit" fullWidth size="large">
