@@ -136,7 +136,7 @@ export function EditPatientForm() {
 
   return (
     <form className="grid grid-cols-1 md:grid-cols-2 gap-4" onSubmit={handleSubmit}>
-      <div className="col-span-2">
+      <div className="md:col-span-2">
         <TextField
           label="Nombre completo"
           name="fullname"
@@ -187,16 +187,7 @@ export function EditPatientForm() {
           onChange={handleChange}
           type="date"
           fullWidth
-        />
-      </div>
-      <div className="col-span-2 row-span-2">
-        <TextField
-          label="Dirección"
-          name="address"
-          value={patientData.address}
-          onChange={handleChange}
-          fullWidth
-          required
+          InputLabelProps={{ shrink: true }}
         />
       </div>
       <div>
@@ -252,6 +243,16 @@ export function EditPatientForm() {
             })()
           )}
         </TextField>
+      </div>
+      <div className="md:col-span-2">
+        <TextField
+          label="Dirección"
+          name="address"
+          value={patientData.address}
+          onChange={handleChange}
+          fullWidth
+          required
+        />
       </div>
       <div className="md:col-span-2">
         <Button type="submit" variant="contained" color="primary" fullWidth disabled={loading}>
