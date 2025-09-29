@@ -5,11 +5,12 @@ import { toast } from 'react-toastify';
 import * as authService from '@/services/auth';
 import { AxiosError } from "axios";
 
+//TODO: Only the admin can create user(doctor)
+
 export function RegisterForm() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [tempStore, setTempStore] = useState({});
 
   const handleUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
@@ -28,7 +29,7 @@ export function RegisterForm() {
 
     try {
       const data = authService.register({ username, email, password });
-      setTempStore(data);
+      console.log(data);
       toast.success('Usuario creado correctamente');
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
@@ -75,12 +76,9 @@ export function RegisterForm() {
           required
         />
       </div>
-
       <Button variant="contained" type="submit" fullWidth size="large">
         Crear Cuenta
       </Button>
-
-      <p>{JSON.stringify(tempStore, null, 2)}</p>
     </form>
   );
 }

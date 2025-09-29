@@ -1,4 +1,5 @@
 import { RegisterForm } from "@/components/auth/RegisterForm";
+import { Link } from "react-router";
 
 export function RegisterUserPage() {
   return (
@@ -7,6 +8,12 @@ export function RegisterUserPage() {
         Registro de Usuario
       </h1>
       <RegisterForm />
+      <p className="mt-4 text-sm text-center text-gray-600">
+        ¿Ya tienes cuenta?{" "}
+        <Link to="/login" className="text-blue-600 hover:underline">
+          Inicia sesion aquí
+        </Link>
+      </p>
     </div>
   );
 }

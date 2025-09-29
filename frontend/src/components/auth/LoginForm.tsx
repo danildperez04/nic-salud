@@ -30,6 +30,7 @@ export function LoginForm() {
 
       setTokenStorage(data.token);
 
+      // TODO: Validate Rol and navigate
       navigate('/doctor');
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -52,6 +53,7 @@ export function LoginForm() {
             type="text"
             value={username}
             onChange={usernameChange}
+            required
           />
         </div>
         <div>
@@ -63,6 +65,7 @@ export function LoginForm() {
             type="password"
             value={password}
             onChange={passwordChange}
+            required
           />
         </div>
         <div className="flex items-center justify-center">

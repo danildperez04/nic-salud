@@ -6,6 +6,12 @@ import { HomeDoctorPage } from '@/pages/HomeDoctorPage'
 import { HomePatientPage } from '@/pages/patient/HomePatientPage'
 import { BrowserRouter, Route, Routes } from 'react-router'
 
+/** TODO: Logica de acceso a sistema y roles
+ * Paciente: login → vinculación automática con registro previo.
+ * Doctor: Admin crea la cuenta, o
+ * Doctor se registra con código de invitación generado por el admin.
+ * Admin: creación manual desde la DB.
+ * */
 
 export default function AppRouter() {
   return (
