@@ -1,18 +1,8 @@
 import { NotFoundException } from "../common/exceptions/httpException";
 import { dataSource } from "../config/database";
-import { Department, Municipality } from "../entities/department.entity";
-
-const departmentRepo = dataSource.getRepository(Department);
+import { Municipality } from "../entities/department.entity";
 
 const municipalityRepo = dataSource.getRepository(Municipality);
-
-async function findAllDepartments() {
-  const departments = await departmentRepo.find({ relations: ["municipalities"] });
-
-  if (!departments) throw new NotFoundException('No se han encontrado departamentos');
-
-  return departments;
-}
 
 async function findAll() {
   const municipalities = await municipalityRepo.find({ relations: ['department'] });
@@ -31,7 +21,6 @@ async function findOne(id: number) {
 }
 
 export {
-  findAllDepartments,
   findAll,
   findOne
 }
